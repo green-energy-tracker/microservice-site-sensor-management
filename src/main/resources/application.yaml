@@ -14,6 +14,10 @@ spring:
       hibernate:
         format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL}
         default_schema: ${SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA}
+  client:
+    user-management:
+      url: ${SPRING_CLIENT_USER_MANAGEMENT_URL}
+      version: ${SPRING_CLIENT_USER_MANAGEMENT_VERSION}
 management:
   endpoints:
     web:

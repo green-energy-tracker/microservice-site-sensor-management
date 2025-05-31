@@ -14,13 +14,23 @@ public class Sensor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "code", nullable = false, unique = true )
+    private String code;
+
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "site_id", nullable = false)
     private Site site;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private String type;
+    private SensorType type;
+
     @Column(name = "model", nullable = false)
     private String model;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private SensorStatus status;
 }
