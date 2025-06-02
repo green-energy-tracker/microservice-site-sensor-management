@@ -8,6 +8,6 @@ public class UserManagementClientFallbackFactory implements FallbackFactory<User
     @Override
     public UserManagementClient create(Throwable cause) {
         log.error(cause.getMessage());
-        return username -> {throw new IllegalStateException("UserManagement service not reachable for username='" + username + "'", cause);};
+        return username -> {throw new UserManagementUnavailableException("UserManagement service not reachable, clause: " + cause);};
     }
 }
