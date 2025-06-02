@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/site-management")
+@RequestMapping("/api/v1/site-management/site")
 public class SiteController {
 
     private final SiteService siteService;
@@ -80,7 +80,7 @@ public class SiteController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
     @GetMapping("/findByName")
-    public ResponseEntity<Site> getSiteByName(@RequestParam String name) {
+    public ResponseEntity<Site> getByName(@RequestParam String name) {
         return ResponseEntity.ok(siteService.findByName(name));
     }
 

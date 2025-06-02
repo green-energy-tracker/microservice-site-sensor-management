@@ -26,7 +26,7 @@ public class SensorServiceImpl implements SensorService {
         var site = siteService.findByName(siteName);
         return sensorRepository.save(Sensor.builder()
                 .site(site)
-                 .code(code)
+                .code(code)
                 .type(type)
                 .model(model)
                 .status(SensorStatus.INACTIVE)
