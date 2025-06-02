@@ -71,5 +71,18 @@ public class SiteController {
         return ResponseEntity.status(HttpStatus.OK);
     }
 
+    @Operation(summary = "Get Site Info by Name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Site found"),
+            @ApiResponse(responseCode = "400", description = "Invalid name parameter", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Access denied", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Site not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
+    })
+    @GetMapping("/findByName")
+    public ResponseEntity<Site> getSiteByName(@RequestParam String name) {
+        return ResponseEntity.ok(siteService.findByName(name));
+    }
+
 
 }
