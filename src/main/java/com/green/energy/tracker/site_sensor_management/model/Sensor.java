@@ -1,5 +1,6 @@
 package com.green.energy.tracker.site_sensor_management.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Sensor {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "site_id", nullable = false)
+    @JsonIgnore
     private Site site;
 
     @Enumerated(EnumType.STRING)
