@@ -18,6 +18,18 @@ spring:
     user-management:
       url: ${SPRING_CLIENT_USER_MANAGEMENT_URL}
       version: ${SPRING_CLIENT_USER_MANAGEMENT_VERSION}
+  cloud:
+    circuitbreaker:
+      resilience4j:
+        instances:
+          cbUserManagementFeignClient:
+            registerHealthIndicator: true
+            slidingWindowType: TIME_BASED
+            slidingWindowSize: 10
+            minimumNumberOfCalls: 5
+            failureRateThreshold: 50
+            waitDurationInOpenState: 10s
+            permittedNumberOfCallsInHalfOpenState: 3
 management:
   endpoints:
     web:
