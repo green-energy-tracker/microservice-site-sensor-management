@@ -1,5 +1,6 @@
 package com.green.energy.tracker.site_sensor_management.controller;
 
+import com.green.energy.tracker.site_sensor_management.client.UserManagementUnavailableException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class SiteSensorControllerAdvice {
         return ErrorResponse.builder(ex, ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage())).instance(URI.create(request.getRequestURI())).build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public ErrorResponse handleInternalError(Exception ex, HttpServletRequest request) {
+    @ExceptionHandler(UserManagementUnavailableException.class)
+    public ErrorResponse handleUserServiceUnavailable(Exception ex, HttpServletRequest request) {
         return ErrorResponse.builder(ex, ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR)).instance(URI.create(request.getRequestURI())).build();
     }
 
