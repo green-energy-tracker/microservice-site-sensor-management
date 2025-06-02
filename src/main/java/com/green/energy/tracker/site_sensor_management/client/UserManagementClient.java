@@ -3,6 +3,7 @@ package com.green.energy.tracker.site_sensor_management.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
         name = "user-management",
@@ -10,5 +11,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 )
 public interface UserManagementClient {
     @GetMapping("/findIdByUsername/{username}")
-    Long findUserIdByUsername(@PathVariable("username") String username);
+    Long findUserIdByUsername(@RequestParam("username") String username);
 }
