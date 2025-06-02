@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
         url = "${spring.client.user-management.url}/${spring.client.user-management.version}/user-management"
 )
 public interface UserManagementClient {
-    @GetMapping("/findIdByUsername/{username}")
+    @GetMapping("/findIdByUsername")
     Long findUserIdByUsername(@RequestParam("username") String username);
 }
