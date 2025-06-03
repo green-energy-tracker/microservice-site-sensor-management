@@ -18,17 +18,11 @@ spring:
     user-management:
       url: ${SPRING_CLIENT_USER_MANAGEMENT_URL}
       version: ${SPRING_CLIENT_USER_MANAGEMENT_VERSION}
-  feign:
-    retry:
-      enabled: false
   cloud:
-    feign:
-      circuitbreaker:
-        enabled: true
     circuitbreaker:
       resilience4j:
         instances:
-          user-management:
+          cb-user-management:
             registerHealthIndicator: true
             slidingWindowType: TIME_BASED
             slidingWindowSize: 10
