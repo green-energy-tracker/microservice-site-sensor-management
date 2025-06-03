@@ -26,8 +26,8 @@ spring:
             registerHealthIndicator: true
             slidingWindowType: TIME_BASED
             slidingWindowSize: 10
-            minimumNumberOfCalls: 5
-            failureRateThreshold: 50
+            minimumNumberOfCalls: 2
+            failureRateThreshold: 10
             waitDurationInOpenState: 10s
             permittedNumberOfCallsInHalfOpenState: 3
 management:
