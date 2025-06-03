@@ -10,6 +10,6 @@ public class UserManagementClientFallbackFactory implements FallbackFactory<User
     @Override
     public UserManagementClient create(Throwable cause) {
         log.error("Fallback triggered due to: {}", cause.toString());
-        return username -> {throw new UserManagementUnavailableException("UserManagement service not reachable, clause: " + cause);};
+        return username -> {throw new UserManagementUnavailableException("UserManagement service not reachable", cause);};
     }
 }
