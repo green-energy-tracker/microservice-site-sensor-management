@@ -25,7 +25,7 @@ spring:
           cb-user-management:
             slidingWindowSize: ${SPRING_CLOUD_CIRCUIT_BREAKER_USER_SLIDING_WINDOW_SIZE}
             failureRateThreshold: ${SPRING_CLOUD_CIRCUIT_BREAKER_USER_FAILURE_RATE}
-            minimumNumberOfCalls: ${SPRING_CLOUD_CIRCUIT_BREAKER_USER_MIN_NUM_CALL
+            minimumNumberOfCalls: ${SPRING_CLOUD_CIRCUIT_BREAKER_USER_MIN_NUM_CALL}
             waitDurationInOpenState: ${SPRING_CLOUD_CIRCUIT_BREAKER_USER_WAIT_OPEN_STATE}
             permittedNumberOfCallsInHalfOpenState: ${SPRING_CLOUD_CIRCUIT_BREAKER_USER_HALF_OPEN_CALL}
             registerHealthIndicator: ${SPRING_CLOUD_CIRCUIT_BREAKER_USER_HEALTH_INDICATOR}
