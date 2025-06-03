@@ -54,7 +54,7 @@ public class KafkaProducerConfig {
         return new DefaultKafkaProducerFactory<>(config);
     }
 
-    @Bean(name = "avroSiteKafkaTemplate")
+    @Bean(name = "avroSensorKafkaTemplate")
     public KafkaTemplate<String, SensorEventPayload> avroSensorKafkaTemplate() {
         return new KafkaTemplate<>(avroSensorProducerFactory());
     }
