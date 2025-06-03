@@ -18,7 +18,13 @@ spring:
     user-management:
       url: ${SPRING_CLIENT_USER_MANAGEMENT_URL}
       version: ${SPRING_CLIENT_USER_MANAGEMENT_VERSION}
+  feign:
+    retry:
+      enabled: false
   cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
     circuitbreaker:
       resilience4j:
         instances:
