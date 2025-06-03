@@ -4,16 +4,19 @@ import com.green.energy.tracker.site_sensor_management.client.UserManagementClie
 import com.green.energy.tracker.site_sensor_management.model.Site;
 import com.green.energy.tracker.site_sensor_management.repository.SiteRepository;
 import com.green.energy.tracker.site_sensor_management.service.SiteService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service("SiteServiceV1")
 @Transactional
+@Slf4j
 public class SiteServiceImpl implements SiteService {
 
     private final SiteRepository siteRepository;
@@ -68,10 +71,13 @@ public class SiteServiceImpl implements SiteService {
     public List<Site> findByOwnerId(Long ownerId) {
         return siteRepository.findByOwnerId(ownerId);
     }
-
+    @CircuitBreaker(name = "user-management", fallbackMethod = "fallback")
     @Override
     public Long findOwnerIdByUsername(String ownerUsername) {
         return userManagementClient.findUserIdByUsername(ownerUsername);
     }
-
+    public Long fallback(String username, Throwable t) {
+        log.warn("Fallback attivato: {}", t.getMessage());
+        return -1L;
+    }
 }
