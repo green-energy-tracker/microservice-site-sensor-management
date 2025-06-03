@@ -25,8 +25,6 @@ public class UserManagementWebClientService {
                 username,
                 cause.getMessage()
         );
-        log.error("Fallback called for user '{}' due to: {}", username, cause.toString());
-        throw new RuntimeException("test failure");
-        //throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, detailedMessage);
+        throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, detailedMessage);
     }
 }
