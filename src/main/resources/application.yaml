@@ -23,13 +23,11 @@ spring:
       resilience4j:
         instances:
           cb-user-management:
-            registerHealthIndicator: true
-            slidingWindowType: TIME_BASED
-            slidingWindowSize: 30
-            minimumNumberOfCalls: 2
-            failureRateThreshold: 10
+            slidingWindowSize: 10
+            failureRateThreshold: 50
             waitDurationInOpenState: 10s
             permittedNumberOfCallsInHalfOpenState: 3
+            registerHealthIndicator: true
 management:
   endpoints:
     web:
