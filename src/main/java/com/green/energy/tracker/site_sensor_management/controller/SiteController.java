@@ -24,7 +24,8 @@ public class SiteController {
             @ApiResponse(responseCode = "400", description = "Invalid parameters", content = @Content),
             @ApiResponse(responseCode = "403", description = "Access denied", content = @Content),
             @ApiResponse(responseCode = "404", description = "Owner user not found", content = @Content),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content),
+            @ApiResponse(responseCode = "503", description = "User Management Service unavailable", content = @Content)
     })
     @PostMapping("/create")
     public ResponseEntity<Site> createSite(@RequestParam String name, @RequestParam String location, @RequestParam String ownerUsername) {
@@ -51,6 +52,7 @@ public class SiteController {
             @ApiResponse(responseCode = "403", description = "Access denied", content = @Content),
             @ApiResponse(responseCode = "404", description = "Site not found", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
+            @ApiResponse(responseCode = "503", description = "User Management Service unavailable", content = @Content)
     })
     @PatchMapping("/updateOwner")
     public ResponseEntity<Site> updateOwner(@RequestParam String name, @RequestParam String ownerUsername) {
