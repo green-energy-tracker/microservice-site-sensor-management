@@ -20,6 +20,9 @@ spring:
       version: ${SPRING_CLIENT_USER_MANAGEMENT_VERSION}
 
   cloud:
+    feign:
+      circuitbreaker:
+        enabled: true
     circuitbreaker:
       resilience4j:
         instances:

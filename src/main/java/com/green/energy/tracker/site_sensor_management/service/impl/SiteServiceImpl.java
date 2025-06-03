@@ -4,16 +4,11 @@ import com.green.energy.tracker.site_sensor_management.client.UserManagementClie
 import com.green.energy.tracker.site_sensor_management.model.Site;
 import com.green.energy.tracker.site_sensor_management.repository.SiteRepository;
 import com.green.energy.tracker.site_sensor_management.service.SiteService;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import javax.naming.ServiceUnavailableException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -74,13 +69,9 @@ public class SiteServiceImpl implements SiteService {
         return siteRepository.findByOwnerId(ownerId);
     }
 
-    @CircuitBreaker(name = "cb-user-management", fallbackMethod = "fallbackFindOwnerIdByUsername")
     @Override
     public Long findOwnerIdByUsername(String ownerUsername) {
         return userManagementClient.findUserIdByUsername(ownerUsername);
     }
 
-    public Long fallbackFindOwnerIdByUsername(String ownerUsername, Throwable ex) {
-        throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "User-management unavailable");
-    }
 }
