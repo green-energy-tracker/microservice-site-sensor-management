@@ -24,4 +24,12 @@ public class SiteSensorControllerAdvice {
         return ErrorResponse.builder(ex, ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage())).instance(URI.create(request.getRequestURI())).build();
     }
 
+    @ExceptionHandler(UserManagementUnavailableException.class)
+    public ErrorResponse handleServiceUnavailable(UserManagementUnavailableException ex, HttpServletRequest request) {
+        return ErrorResponse.builder(ex,
+                        ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage()))
+                .instance(URI.create(request.getRequestURI()))
+                .build();
+    }
+
 }

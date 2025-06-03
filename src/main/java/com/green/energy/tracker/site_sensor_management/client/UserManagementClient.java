@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(
         name = "user-management",
         url = "${spring.client.user-management.url}/${spring.client.user-management.version}/user-management",
-        fallbackFactory = UserManagementClientFallbackFactory.class,
-        qualifiers = "cbUserManagementFeignClient"
+        fallbackFactory = UserManagementClientFallbackFactory.class
 )
 public interface UserManagementClient {
     @GetMapping("/findIdByUsername")

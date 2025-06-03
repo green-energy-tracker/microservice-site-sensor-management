@@ -22,7 +22,7 @@ spring:
     circuitbreaker:
       resilience4j:
         instances:
-          cbUserManagementFeignClient:
+          user-management:
             registerHealthIndicator: true
             slidingWindowType: TIME_BASED
             slidingWindowSize: 10
