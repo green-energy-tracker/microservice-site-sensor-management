@@ -2,12 +2,14 @@ package com.green.energy.tracker.site_sensor_management.client;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service("UserManagementWebClientServiceV1")
 @RequiredArgsConstructor
+@Slf4j
 public class UserManagementWebClientService {
 
     private final UserManagementWebClient userManagementServiceClient;
@@ -23,6 +25,8 @@ public class UserManagementWebClientService {
                 username,
                 cause.getMessage()
         );
-        throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, detailedMessage);
+        log.error("Fallback called for user '{}' due to: {}", username, cause.toString());
+        throw new RuntimeException("test failure");
+        //throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, detailedMessage);
     }
 }
