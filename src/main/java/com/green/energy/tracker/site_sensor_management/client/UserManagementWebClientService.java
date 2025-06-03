@@ -2,14 +2,12 @@ package com.green.energy.tracker.site_sensor_management.client;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service("UserManagementWebClientServiceV1")
 @RequiredArgsConstructor
-@Slf4j
 public class UserManagementWebClientService {
 
     private final UserManagementWebClient userManagementServiceClient;
