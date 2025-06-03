@@ -25,6 +25,7 @@ spring:
           cb-user-management:
             slidingWindowSize: 10
             failureRateThreshold: 50
+            minimumNumberOfCalls: 4
             waitDurationInOpenState: 10s
             permittedNumberOfCallsInHalfOpenState: 3
             registerHealthIndicator: true
