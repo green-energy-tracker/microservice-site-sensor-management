@@ -16,7 +16,8 @@
 	<url/>
 	<properties>
 		<java.version>17</java.version>
-		<userEventSubject>^site-sensor-events-(key|value)$</userEventSubject>
+		<siteEventSubject>^site-events-(key|value)$</siteEventSubject>
+		<sensorEventSubject>^sensor-events-(key|value)$</sensorEventSubject>
 	</properties>
 
 	<dependencies>
@@ -188,7 +189,8 @@
 					</schemaRegistryUrls>
 					<outputDirectory>src/main/resources/avro</outputDirectory>
 					<subjectPatterns>
-						<param>${userEventSubject}</param>
+						<param>${siteEventSubject}</param>
+						<param>${sensorEventSubject}</param>
 					</subjectPatterns>
 					<compatibilityLevels/>
 					<messagePath/>
