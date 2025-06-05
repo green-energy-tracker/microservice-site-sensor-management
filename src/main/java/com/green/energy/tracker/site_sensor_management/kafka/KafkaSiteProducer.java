@@ -20,9 +20,9 @@ public class KafkaSiteProducer {
     private final KafkaTemplate<String, SiteEventPayload> avroSiteKafkaTemplate;
     private final ModelMapper modelMapper;
 
-    public void sendMessage(EventType eventType, Site site) throws ExecutionException, InterruptedException {
+    public void sendMessage(EventType eventType, Site site) {
         var siteEventPayload = modelMapper.map(site, SiteEventPayload.class);
         siteEventPayload.setEventType(eventType.name());
-        avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload).get();
+        avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload);
     }
 }

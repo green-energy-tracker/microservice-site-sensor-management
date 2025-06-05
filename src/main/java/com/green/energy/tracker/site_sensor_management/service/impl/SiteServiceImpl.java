@@ -1,6 +1,8 @@
 package com.green.energy.tracker.site_sensor_management.service.impl;
 
 import com.green.energy.tracker.site_sensor_management.client.UserManagementWebClientService;
+import com.green.energy.tracker.site_sensor_management.kafka.KafkaSiteProducer;
+import com.green.energy.tracker.site_sensor_management.model.EventType;
 import com.green.energy.tracker.site_sensor_management.model.Site;
 import com.green.energy.tracker.site_sensor_management.repository.SiteRepository;
 import com.green.energy.tracker.site_sensor_management.service.SiteService;
@@ -20,38 +22,40 @@ public class SiteServiceImpl implements SiteService {
 
     private final SiteRepository siteRepository;
     private final UserManagementWebClientService userManagementWebClientService;
+    private final KafkaSiteProducer kafkaSiteProducer;
 
     @Override
     public Site create(String name, String location, String ownerUsername) {
         if(siteRepository.findByName(name).isPresent())
             throw new EntityExistsException("Site already exists with name: " + name);
-        return siteRepository.save(
-                Site.builder()
-                        .name(name)
-                        .ownerId(findOwnerIdByUsername(ownerUsername))
-                        .location(location)
-                        .build()
-        );
+        var site = siteRepository.save(Site.builder().name(name).ownerId(findOwnerIdByUsername(ownerUsername)).location(location).build());
+        kafkaSiteProducer.sendMessage(EventType.CREATE,site);
+        return site;
     }
 
     @Override
     public Site updateLocation(String name, String location) {
         var site = findByName(name);
         site.setLocation(location);
-        return siteRepository.save(site);
+        site = siteRepository.save(site);
+        kafkaSiteProducer.sendMessage(EventType.UPDATE,site);
+        return site;
     }
 
     @Override
     public Site updateOwner(String name, String ownerUsername) {
         var site = findByName(name);
         site.setOwnerId(findOwnerIdByUsername(ownerUsername));
-        return siteRepository.save(site);
+        site = siteRepository.save(site);
+        kafkaSiteProducer.sendMessage(EventType.UPDATE,site);
+        return site;
     }
 
     @Override
     public void delete(String name) {
         var site = findByName(name);
         siteRepository.delete(site);
+        kafkaSiteProducer.sendMessage(EventType.DELETE,site);
     }
 
     @Override

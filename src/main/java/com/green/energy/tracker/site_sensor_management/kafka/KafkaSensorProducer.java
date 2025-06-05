@@ -21,9 +21,9 @@ public class KafkaSensorProducer {
     private final KafkaTemplate<String, SensorEventPayload> avroSensorKafkaTemplate;
     private final ModelMapper modelMapper;
 
-    public void sendMessage(EventType eventType, Sensor sensor) throws ExecutionException, InterruptedException {
+    public void sendMessage(EventType eventType, Sensor sensor) {
         var sensorEventPayload = modelMapper.map(sensor, SensorEventPayload.class);
         sensorEventPayload.setEventType(eventType.name());
-        avroSensorKafkaTemplate.send(topicSensorEvents, String.valueOf(sensorEventPayload.getId()), sensorEventPayload).get();
+        avroSensorKafkaTemplate.send(topicSensorEvents, String.valueOf(sensorEventPayload.getId()), sensorEventPayload);
     }
 }
