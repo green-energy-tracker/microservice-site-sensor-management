@@ -9,8 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -18,12 +17,21 @@ import java.util.concurrent.ExecutionException;
 public class KafkaSensorProducer {
     @Value("${spring.kafka.topic.sensor-events}")
     private String topicSensorEvents;
+    @Value("${spring.kafka.topic.sensor-events-dlt}")
+    private String topicSensorEventsDlt;
     private final KafkaTemplate<String, SensorEventPayload> avroSensorKafkaTemplate;
+    private final KafkaDltProducer kafkaDltProducer;
     private final ModelMapper modelMapper;
 
     public void sendMessage(EventType eventType, Sensor sensor) {
         var sensorEventPayload = modelMapper.map(sensor, SensorEventPayload.class);
         sensorEventPayload.setEventType(eventType.name());
-        avroSensorKafkaTemplate.send(topicSensorEvents, String.valueOf(sensorEventPayload.getId()), sensorEventPayload);
+        avroSensorKafkaTemplate.send(topicSensorEvents, String.valueOf(sensorEventPayload.getId()), sensorEventPayload)
+                .whenComplete((result, ex) -> {
+                    if (Objects.nonNull(ex))
+                        kafkaDltProducer.sendMessage(topicSensorEventsDlt,result.getProducerRecord(),ex);
+                    else
+                        log.info("Message published on topic {} offset={}", result.getRecordMetadata().topic(),result.getRecordMetadata().offset());
+                });
     }
 }

@@ -9,7 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -17,12 +17,21 @@ import java.util.concurrent.ExecutionException;
 public class KafkaSiteProducer {
     @Value("${spring.kafka.topic.site-events}")
     private String topicSiteEvents;
+    @Value("${spring.kafka.topic.site-events-dlt}")
+    private String topicSiteEventsDlt;
     private final KafkaTemplate<String, SiteEventPayload> avroSiteKafkaTemplate;
+    private final KafkaDltProducer kafkaDltProducer;
     private final ModelMapper modelMapper;
 
     public void sendMessage(EventType eventType, Site site) {
         var siteEventPayload = modelMapper.map(site, SiteEventPayload.class);
         siteEventPayload.setEventType(eventType.name());
-        avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload);
+        avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload)
+                .whenComplete((result, ex) -> {
+                    if (Objects.nonNull(ex))
+                        kafkaDltProducer.sendMessage(topicSiteEventsDlt,result.getProducerRecord(),ex);
+                    else
+                        log.info("Message published on topic {} offset={}", result.getRecordMetadata().topic(),result.getRecordMetadata().offset());
+                });
     }
 }
