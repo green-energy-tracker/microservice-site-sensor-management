@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class SiteServiceImpl implements SiteService {
     public Site create(String name, String location, String ownerUsername) {
         if(siteRepository.findByName(name).isPresent())
             throw new EntityExistsException("Site already exists with name: " + name);
-        var site = siteRepository.save(Site.builder().name(name).ownerId(findOwnerIdByUsername(ownerUsername)).location(location).build());
+        var site = siteRepository.save(Site.builder().name(name).ownerId(findOwnerIdByUsername(ownerUsername)).location(location).sensors(Collections.emptyList()).build());
         kafkaSiteProducer.sendMessage(EventType.CREATE,site);
         return site;
     }
