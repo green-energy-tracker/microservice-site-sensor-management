@@ -54,9 +54,9 @@ public class SensorController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
     @DeleteMapping("/delete")
-    public ResponseEntity.BodyBuilder delete(@RequestParam String code) {
+    public ResponseEntity<Void> delete(@RequestParam String code) {
         sensorService.delete(code);
-        return ResponseEntity.status(HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Get Sensor Info by Code")
