@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import java.util.Objects;
+
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Slf4j
@@ -26,12 +28,12 @@ public class KafkaSensorProducer {
     public void sendMessage(EventType eventType, Sensor sensor) {
         var sensorEventPayload = modelMapper.map(sensor, SensorEventPayload.class);
         sensorEventPayload.setEventType(eventType.name());
-        avroSensorKafkaTemplate.send(topicSensorEvents, String.valueOf(sensorEventPayload.getId()), sensorEventPayload)
-                .whenComplete((result, ex) -> {
-                    if (Objects.nonNull(ex))
-                        kafkaDltProducer.sendMessage(topicSensorEventsDlt,result.getProducerRecord(),ex);
-                    else
-                        log.info("Message published on topic {} offset={}", result.getRecordMetadata().topic(),result.getRecordMetadata().offset());
-                });
+        try{
+            avroSensorKafkaTemplate.send(topicSensorEvents, String.valueOf(sensorEventPayload.getId()), sensorEventPayload).get();
+            log.info("Message published on topic: {}, payload: {}", topicSensorEvents,sensorEventPayload);
+        } catch (KafkaException | ExecutionException | InterruptedException ex) {
+            kafkaDltProducer.sendMessage(topicSensorEventsDlt,sensorEventPayload,ex);
+        }
+
     }
 }

@@ -16,10 +16,10 @@ public class KafkaDltProducer {
 
     private final KafkaTemplate<String, DltRecord> dltRecordKafkaTemplate;
 
-    public void sendMessage(String topicDlt, ProducerRecord<String,? extends SpecificRecord> producerRecord, Throwable ex) {
+    public <T extends SpecificRecord> void sendMessage(String topicDlt, T specificRecord, Throwable ex) {
         var dltMessage = DltRecord.builder()
-                .key(Objects.nonNull(producerRecord.key()) ? producerRecord.key() : "")
-                .payload(Objects.nonNull(producerRecord.value()) ? producerRecord.value().toString() : "")
+                .model(specificRecord.getClass().getSimpleName())
+                .payload(specificRecord.toString())
                 .error(ex.getMessage())
                 .causedBy(ex.getCause().getMessage())
                 .build();

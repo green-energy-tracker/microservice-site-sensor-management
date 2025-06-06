@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DltRecord {
-    private String key;
+    private String model;
     private String payload;
     private String error;
     private String causedBy;

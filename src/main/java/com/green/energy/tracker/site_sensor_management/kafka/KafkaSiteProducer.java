@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import java.util.Objects;
+
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Slf4j
@@ -26,12 +28,11 @@ public class KafkaSiteProducer {
     public void sendMessage(EventType eventType, Site site) {
         var siteEventPayload = modelMapper.map(site, SiteEventPayload.class);
         siteEventPayload.setEventType(eventType.name());
-        avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload)
-                .whenComplete((result, ex) -> {
-                    if (Objects.nonNull(ex))
-                        kafkaDltProducer.sendMessage(topicSiteEventsDlt,result.getProducerRecord(),ex);
-                    else
-                        log.info("Message published on topic {} offset={}", result.getRecordMetadata().topic(),result.getRecordMetadata().offset());
-                });
+        try{
+            avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload).get();
+            log.info("Message published on topic: {}, payload: {}", topicSiteEvents,siteEventPayload);
+        } catch (KafkaException | ExecutionException | InterruptedException ex) {
+            kafkaDltProducer.sendMessage(topicSiteEventsDlt,siteEventPayload,ex);
+        }
     }
 }
