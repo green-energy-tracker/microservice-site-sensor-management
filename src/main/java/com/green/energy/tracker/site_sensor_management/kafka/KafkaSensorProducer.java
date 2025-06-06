@@ -7,11 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.ExecutionException;
 
 @Service
 @Slf4j
@@ -31,7 +28,7 @@ public class KafkaSensorProducer {
         try{
             avroSensorKafkaTemplate.send(topicSensorEvents, String.valueOf(sensorEventPayload.getId()), sensorEventPayload).get();
             log.info("Message published on topic: {}, payload: {}", topicSensorEvents,sensorEventPayload);
-        } catch (KafkaException | ExecutionException | InterruptedException ex) {
+        } catch (Exception ex) {
             kafkaDltProducer.sendMessage(topicSensorEventsDlt,sensorEventPayload,ex);
         }
 
