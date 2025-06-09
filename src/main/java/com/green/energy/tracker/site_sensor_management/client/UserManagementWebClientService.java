@@ -17,7 +17,7 @@ public class UserManagementWebClientService {
         return userManagementServiceClient.findUserIdByUsername(username);
     }
 
-    public Long findUserIdByUsernameFallback(String username, Throwable cause){
+    public void findUserIdByUsernameFallback(String username, Throwable cause){
         String detailedMessage = String.format(
                 "User management service is currently unavailable. Unable to retrieve user ID for username '%s'. Cause: %s",
                 username,

@@ -2,6 +2,7 @@ package com.green.energy.tracker.site_sensor_management.kafka;
 
 import com.green.energy.tracker.configuration.domain.event.SensorEventPayload;
 import com.green.energy.tracker.configuration.domain.event.SiteEventPayload;
+import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class KafkaProducerConfig {
 
 
     @Bean
-    public ProducerFactory<String, SiteEventPayload> avroSiteProducerFactory() {
+    public ProducerFactory<String, ? extends SpecificRecord> avroProducerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, producerAvroKeySerializer);
@@ -39,24 +40,9 @@ public class KafkaProducerConfig {
         return new DefaultKafkaProducerFactory<>(config);
     }
 
-    @Bean(name = "avroSiteKafkaTemplate")
-    public KafkaTemplate<String, SiteEventPayload> avroSiteKafkaTemplate() {
-        return new KafkaTemplate<>(avroSiteProducerFactory());
-    }
-
-    @Bean
-    public ProducerFactory<String, SensorEventPayload> avroSensorProducerFactory() {
-        Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, producerAvroKeySerializer);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, producerAvroValueSerializer);
-        config.put("schema.registry.url", schemaRegistryUrl);
-        return new DefaultKafkaProducerFactory<>(config);
-    }
-
-    @Bean(name = "avroSensorKafkaTemplate")
-    public KafkaTemplate<String, SensorEventPayload> avroSensorKafkaTemplate() {
-        return new KafkaTemplate<>(avroSensorProducerFactory());
+    @Bean(name = "avroKafkaTemplate")
+    public KafkaTemplate<String, ? extends SpecificRecord> avroKafkaTemplate() {
+        return new KafkaTemplate<>(avroProducerFactory());
     }
 
     @Bean

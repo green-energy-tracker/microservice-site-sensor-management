@@ -8,6 +8,7 @@ import com.green.energy.tracker.site_sensor_management.model.SensorType;
 import com.green.energy.tracker.site_sensor_management.repository.SensorRepository;
 import com.green.energy.tracker.site_sensor_management.service.SensorService;
 import com.green.energy.tracker.site_sensor_management.service.SiteService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public Sensor create(String siteName,String code, SensorType type, String model) throws DataIntegrityViolationException {
         var site = siteService.findByName(siteName);
+        if(sensorRepository.findByCode(code).isPresent())
+            throw new EntityExistsException("Sensor already exists with code: " + code);
         var sensor = sensorRepository.save(Sensor.builder().site(site).code(code).type(type).model(model).status(SensorStatus.INACTIVE).build());
         kafkaSensorProducer.sendMessage(EventType.CREATE,sensor);
         return sensor;
