@@ -5,6 +5,7 @@ import com.green.energy.tracker.site_sensor_management.model.EventType;
 import com.green.energy.tracker.site_sensor_management.model.Site;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.specific.SpecificRecord;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -18,7 +19,7 @@ public class KafkaSiteProducer {
     private String topicSiteEvents;
     @Value("${spring.kafka.topic.site-events-dlt}")
     private String topicSiteEventsDlt;
-    private final KafkaTemplate<String, SiteEventPayload> avroSiteKafkaTemplate;
+    private final KafkaTemplate<String, SpecificRecord> avroSiteKafkaTemplate;
     private final KafkaDltProducer kafkaDltProducer;
     private final ModelMapper modelMapper;
 

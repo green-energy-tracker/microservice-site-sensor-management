@@ -31,7 +31,7 @@ public class KafkaProducerConfig {
 
 
     @Bean
-    public ProducerFactory<String, ? extends SpecificRecord> avroProducerFactory() {
+    public ProducerFactory<String,SpecificRecord> avroProducerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, producerAvroKeySerializer);
@@ -41,7 +41,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean(name = "avroKafkaTemplate")
-    public KafkaTemplate<String, ? extends SpecificRecord> avroKafkaTemplate() {
+    public KafkaTemplate<String, SpecificRecord> avroKafkaTemplate() {
         return new KafkaTemplate<>(avroProducerFactory());
     }
 
