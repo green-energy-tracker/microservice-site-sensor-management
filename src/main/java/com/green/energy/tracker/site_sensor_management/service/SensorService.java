@@ -3,7 +3,6 @@ package com.green.energy.tracker.site_sensor_management.service;
 import com.green.energy.tracker.site_sensor_management.model.Sensor;
 import com.green.energy.tracker.site_sensor_management.model.SensorStatus;
 import com.green.energy.tracker.site_sensor_management.model.SensorType;
-import com.green.energy.tracker.site_sensor_management.model.Site;
 
 import java.util.List;
 

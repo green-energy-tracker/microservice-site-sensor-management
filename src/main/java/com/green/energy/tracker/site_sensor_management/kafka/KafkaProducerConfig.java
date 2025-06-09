@@ -1,7 +1,5 @@
 package com.green.energy.tracker.site_sensor_management.kafka;
 
-import com.green.energy.tracker.configuration.domain.event.SensorEventPayload;
-import com.green.energy.tracker.configuration.domain.event.SiteEventPayload;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;

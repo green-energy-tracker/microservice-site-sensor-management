@@ -26,6 +26,6 @@ public class KafkaDltProducer {
                 .exceptionally(error -> {
                     log.error("Error while sending message to Kafka topic {}: {}", topicDlt, error.getMessage(), error);
                     return null;
-                });;
+                });
     }
 }

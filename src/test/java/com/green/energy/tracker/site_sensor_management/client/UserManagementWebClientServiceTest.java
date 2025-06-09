@@ -27,8 +27,9 @@ class UserManagementWebClientServiceTest {
 
     @Test
     void findUserIdByUsernameFallbackTest(){
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-                () -> userManagementWebClientService.findUserIdByUsernameFallback("test",  new RuntimeException("Timeout")));
+        String username = "test";
+        RuntimeException cause = new RuntimeException("Timeout");
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> userManagementWebClientService.findUserIdByUsernameFallback(username, cause));
         assertNotNull(exception.getReason());
         assertTrue(exception.getReason().contains("User management service is currently unavailable"));
         assertTrue(exception.getReason().contains("test"));
