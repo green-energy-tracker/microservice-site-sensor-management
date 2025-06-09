@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +29,15 @@ public class KafkaSiteProducer {
         var siteEventPayload = modelMapper.map(site, SiteEventPayload.class);
         siteEventPayload.setEventType(eventType.name());
         try{
-            avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload).get();
+            avroSiteKafkaTemplate.send(topicSiteEvents, String.valueOf(siteEventPayload.getId()), siteEventPayload)
+                    .whenComplete((result, ex) -> {
+                        if (Objects.nonNull(ex)) {
+                            log.error("Failed to send message: {}", ex.getMessage());
+                            kafkaDltProducer.sendMessage(topicSiteEventsDlt, siteEventPayload, ex);
+                        } else {
+                            log.info("Message published on topic: {}, payload: {}", topicSiteEvents, siteEventPayload);
+                        }
+                    });
             log.info("Message published on topic: {}, payload: {}", topicSiteEvents,siteEventPayload);
         } catch (Exception ex) {
             kafkaDltProducer.sendMessage(topicSiteEventsDlt,siteEventPayload,ex);
