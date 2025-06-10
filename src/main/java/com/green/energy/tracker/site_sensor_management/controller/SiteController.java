@@ -95,8 +95,8 @@ public class SiteController {
             @ApiResponse(responseCode = "404", description = "Site not found", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
-    @PostMapping("/findBySensor")
-    public ResponseEntity<Site> getBySensor(@RequestBody Sensor sensor) {
-        return ResponseEntity.ok(siteService.findBySensor(sensor));
+    @GetMapping("/findBySensorId")
+    public ResponseEntity<Site> getBySensorId(@RequestParam Long sensorId) {
+        return ResponseEntity.ok(siteService.findBySensorId(sensorId));
     }
 }

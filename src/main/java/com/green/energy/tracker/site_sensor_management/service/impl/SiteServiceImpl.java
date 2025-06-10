@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
@@ -85,10 +86,10 @@ public class SiteServiceImpl implements SiteService {
     }
 
     @Override
-    public Site findBySensor(Sensor sensor) {
+    public Site findBySensorId(Long sensorId) {
         return StreamSupport.stream(siteRepository.findAll().spliterator(), false)
-                .filter(site -> site.getSensors().contains(sensor))
-                .findAny().orElseThrow(()->new EntityNotFoundException("Site not found with sensor: "+ sensor));
+                .filter(site -> site.getSensors().stream().anyMatch(sensor -> Objects.equals(sensor.getId(), sensorId)))
+                .findAny().orElseThrow(()->new EntityNotFoundException("Site not found with sensor id: "+ sensorId));
     }
 
 }

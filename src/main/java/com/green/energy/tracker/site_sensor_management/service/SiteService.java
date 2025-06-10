@@ -14,5 +14,5 @@ public interface SiteService {
     Site findByName(String name);
     List<Site> findByOwnerId(Long ownerId);
     Long findOwnerIdByUsername(String ownerUsername);
-    Site findBySensor(Sensor sensor);
+    Site findBySensorId(Long sensorId);
 }
