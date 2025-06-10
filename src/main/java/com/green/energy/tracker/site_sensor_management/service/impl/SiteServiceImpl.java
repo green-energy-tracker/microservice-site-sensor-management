@@ -3,6 +3,7 @@ package com.green.energy.tracker.site_sensor_management.service.impl;
 import com.green.energy.tracker.site_sensor_management.client.UserManagementWebClientService;
 import com.green.energy.tracker.site_sensor_management.kafka.KafkaSiteProducer;
 import com.green.energy.tracker.site_sensor_management.model.EventType;
+import com.green.energy.tracker.site_sensor_management.model.Sensor;
 import com.green.energy.tracker.site_sensor_management.model.Site;
 import com.green.energy.tracker.site_sensor_management.repository.SiteRepository;
 import com.green.energy.tracker.site_sensor_management.service.SiteService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 @Service("SiteServiceV1")
@@ -80,6 +82,13 @@ public class SiteServiceImpl implements SiteService {
     @Override
     public Long findOwnerIdByUsername(String ownerUsername) {
         return userManagementWebClientService.findUserIdByUsername(ownerUsername);
+    }
+
+    @Override
+    public Site findBySensor(Sensor sensor) {
+        return StreamSupport.stream(siteRepository.findAll().spliterator(), false)
+                .filter(site -> site.getSensors().contains(sensor))
+                .findAny().orElseThrow(()->new EntityNotFoundException("Site not found with sensor: "+ sensor));
     }
 
 }

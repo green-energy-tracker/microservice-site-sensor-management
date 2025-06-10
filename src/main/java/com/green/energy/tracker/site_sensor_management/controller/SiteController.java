@@ -1,5 +1,6 @@
 package com.green.energy.tracker.site_sensor_management.controller;
 
+import com.green.energy.tracker.site_sensor_management.model.Sensor;
 import com.green.energy.tracker.site_sensor_management.model.Site;
 import com.green.energy.tracker.site_sensor_management.service.SiteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -86,5 +87,16 @@ public class SiteController {
         return ResponseEntity.ok(siteService.findByName(name));
     }
 
-
+    @Operation(summary = "Get Site Info by Sensor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Site found"),
+            @ApiResponse(responseCode = "400", description = "Invalid sensor parameter", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Access denied", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Site not found", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
+    })
+    @GetMapping("/findBySensor")
+    public ResponseEntity<Site> getBySensor(@RequestParam Sensor sensor) {
+        return ResponseEntity.ok(siteService.findBySensor(sensor));
+    }
 }

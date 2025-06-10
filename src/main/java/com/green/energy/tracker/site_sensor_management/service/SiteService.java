@@ -1,5 +1,6 @@
 package com.green.energy.tracker.site_sensor_management.service;
 
+import com.green.energy.tracker.site_sensor_management.model.Sensor;
 import com.green.energy.tracker.site_sensor_management.model.Site;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface SiteService {
     Site findByName(String name);
     List<Site> findByOwnerId(Long ownerId);
     Long findOwnerIdByUsername(String ownerUsername);
+    Site findBySensor(Sensor sensor);
 }
