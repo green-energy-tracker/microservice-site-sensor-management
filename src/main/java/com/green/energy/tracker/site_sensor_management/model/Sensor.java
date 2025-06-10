@@ -22,6 +22,7 @@ public class Sensor {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "site_id", nullable = false)
+    @JsonIgnore
     private Site site;
 
     @Enumerated(EnumType.STRING)
