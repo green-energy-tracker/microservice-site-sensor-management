@@ -1,6 +1,5 @@
 package com.green.energy.tracker.site_sensor_management.controller;
 
-import com.green.energy.tracker.site_sensor_management.model.Sensor;
 import com.green.energy.tracker.site_sensor_management.model.Site;
 import com.green.energy.tracker.site_sensor_management.service.SiteService;
 import io.swagger.v3.oas.annotations.Operation;
